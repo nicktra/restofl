@@ -55,10 +55,7 @@ class RestoDetailPage extends StatelessWidget {
                 children: [
                   Text(
                     resto.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                   Divider(color: Colors.grey),
                   Row(
@@ -67,7 +64,10 @@ class RestoDetailPage extends StatelessWidget {
                         Icons.location_city,
                         color: Colors.teal[400],
                       ),
-                      Text(' ${resto.city}')
+                      Text(
+                        ' ${resto.city}',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      )
                     ],
                   ),
                   SizedBox(height: 10),
@@ -77,13 +77,16 @@ class RestoDetailPage extends StatelessWidget {
                         Icons.star,
                         color: Colors.amber[400],
                       ),
-                      Text(' ${resto.rating}')
+                      Text(
+                        ' ${resto.rating}',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      )
                     ],
                   ),
                   Divider(color: Colors.grey),
                   Text(
                     resto.description,
-                    style: TextStyle(fontSize: 16),
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   SizedBox(height: 10),
                   Divider(color: Colors.grey),
@@ -97,8 +100,7 @@ class RestoDetailPage extends StatelessWidget {
                         ),
                         Text(
                           ' Foods',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.headline6,
                         )
                       ],
                     ),
@@ -116,7 +118,11 @@ class RestoDetailPage extends StatelessWidget {
                               children: <Widget>[
                                 Container(
                                   padding: const EdgeInsets.all(4.0),
-                                  child: Text("• ${name.toString()}"),
+                                  child: Text(
+                                    '• ${name.toString()}',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
                                 ),
                               ],
                             ),
@@ -139,8 +145,7 @@ class RestoDetailPage extends StatelessWidget {
                         ),
                         Text(
                           ' Drinks',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.headline6,
                         )
                       ],
                     ),
@@ -158,7 +163,11 @@ class RestoDetailPage extends StatelessWidget {
                               children: <Widget>[
                                 Container(
                                   padding: const EdgeInsets.all(4.0),
-                                  child: Text("• ${name.toString()}"),
+                                  child: Text(
+                                    '• ${name.toString()}',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
                                 ),
                               ],
                             ),

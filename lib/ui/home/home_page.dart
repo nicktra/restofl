@@ -61,7 +61,6 @@ Widget _buildRestoItem(BuildContext context, Resto resto) {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
-            color: Colors.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -87,11 +86,7 @@ Widget _buildRestoItem(BuildContext context, Resto resto) {
                   ),
                   child: Text(
                     resto.name,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: const Color(0xff47455f),
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: Theme.of(context).textTheme.headline6,
                     textAlign: TextAlign.left,
                     maxLines: 1,
                   ),
@@ -115,8 +110,10 @@ Widget _buildRestoItem(BuildContext context, Resto resto) {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(resto.city,
-                          style: TextStyle(fontSize: 16, color: Colors.black)),
+                      Text(
+                        resto.city,
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
                       Row(
                         children: [
                           Icon(
@@ -124,9 +121,10 @@ Widget _buildRestoItem(BuildContext context, Resto resto) {
                             color: Colors.amber[400],
                             size: 16,
                           ),
-                          Text(resto.rating.toString(),
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black))
+                          Text(
+                            resto.rating.toString(),
+                            style: Theme.of(context).textTheme.subtitle1,
+                          )
                         ],
                       )
                     ],
