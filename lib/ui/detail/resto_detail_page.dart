@@ -61,7 +61,7 @@ class RestoDetailPage extends StatelessWidget {
                   Row(
                     children: [
                       Icon(
-                        Icons.location_city,
+                        Icons.location_on,
                         color: Colors.teal[400],
                       ),
                       Text(

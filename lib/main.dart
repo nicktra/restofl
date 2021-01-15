@@ -21,6 +21,10 @@ class MyApp extends StatelessWidget {
           textTheme: myTextTheme.apply(bodyColor: Colors.black),
           elevation: 0,
         ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: secondaryColor,
+          unselectedItemColor: Colors.grey,
+        ),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -31,6 +35,10 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           textTheme: myTextTheme.apply(bodyColor: Colors.white),
           elevation: 0,
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: secondaryColor2,
+          unselectedItemColor: Colors.grey,
         ),
       ),
       themeMode: ThemeMode.system,
