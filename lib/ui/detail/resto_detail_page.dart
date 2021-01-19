@@ -1,33 +1,71 @@
-import 'package:restofl/data/model/resto.dart';
+import 'package:restofl/data/api/api_service.dart';
+import 'package:restofl/data/model/restaurant_detail.dart';
+import 'package:restofl/data/model/restaurant_list.dart' as restaurant_list;
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-class RestoDetailPage extends StatelessWidget {
+class RestoDetailPage extends StatefulWidget {
   static const routeName = '/resto_detail';
 
-  final Resto resto;
+  final restaurant_list.Restaurant restaurant;
 
-  const RestoDetailPage({@required this.resto});
+  const RestoDetailPage({@required this.restaurant});
 
   @override
+  _RestoDetailPageState createState() => _RestoDetailPageState();
+}
+
+class _RestoDetailPageState extends State<RestoDetailPage> {
+  Future<RestaurantDetail> _restaurantDetail;
+
+  @override
+  void initState() {
+    _restaurantDetail = ApiService().getRestaurantDetail(widget.restaurant.id);
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _restaurantDetail,
+      builder: (context, AsyncSnapshot<RestaurantDetail> snapshot) {
+        var state = snapshot.connectionState;
+        if (state != ConnectionState.done) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          if (snapshot.hasData) {
+            var restaurant = snapshot.data.restaurant;
+            return _buildItem(restaurant, context);
+          } else if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          } else {
+            return Text('');
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildItem(Restaurant restaurant, BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
-        title: Text(resto.name),
-      ), */
       body: SingleChildScrollView(
         child: Column(
           children: [
             Stack(
               children: <Widget>[
-                Hero(
-                  tag: resto.name,
-                  child: Image.network(
-                    "${resto.pictureId}",
-                    height: 250,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                restaurant.pictureId == null
+                    ? Container(
+                        height: 200,
+                        child: Icon(Icons.error),
+                      )
+                    : Hero(
+                        tag: restaurant.pictureId,
+                        child: Image.network(
+                          ApiService.baseUrlImage + restaurant.pictureId,
+                          height: 250,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                 SafeArea(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,14 +85,13 @@ class RestoDetailPage extends StatelessWidget {
                 ),
               ],
             ),
-            /* Image.network(resto.pictureId), */
             Padding(
               padding: EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    resto.name,
+                    restaurant.name,
                     style: Theme.of(context).textTheme.headline5,
                   ),
                   Divider(color: Colors.grey),
@@ -65,7 +102,7 @@ class RestoDetailPage extends StatelessWidget {
                         color: Colors.teal[400],
                       ),
                       Text(
-                        ' ${resto.city}',
+                        ' ${restaurant.city}',
                         style: Theme.of(context).textTheme.subtitle1,
                       )
                     ],
@@ -78,14 +115,14 @@ class RestoDetailPage extends StatelessWidget {
                         color: Colors.amber[400],
                       ),
                       Text(
-                        ' ${resto.rating}',
+                        ' ${restaurant.rating}',
                         style: Theme.of(context).textTheme.subtitle1,
                       )
                     ],
                   ),
                   Divider(color: Colors.grey),
                   Text(
-                    resto.description,
+                    restaurant.description,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   SizedBox(height: 10),
@@ -110,7 +147,7 @@ class RestoDetailPage extends StatelessWidget {
                     height: 150,
                     child: ListView(
                       padding: EdgeInsets.only(top: 0),
-                      children: resto.menus.foods.map((name) {
+                      children: restaurant.menus.foods.map((x) {
                         return new Card(
                           elevation: 7.0,
                           child: new Container(
@@ -119,7 +156,7 @@ class RestoDetailPage extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
-                                    '• ${name.toString()}',
+                                    '• ${x.name.toString()}',
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
@@ -155,7 +192,7 @@ class RestoDetailPage extends StatelessWidget {
                     height: 150,
                     child: ListView(
                       padding: EdgeInsets.only(top: 0),
-                      children: resto.menus.drinks.map((name) {
+                      children: restaurant.menus.drinks.map((x) {
                         return new Card(
                           elevation: 7.0,
                           child: new Container(
@@ -164,7 +201,7 @@ class RestoDetailPage extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
-                                    '• ${name.toString()}',
+                                    '• ${x.name.toString()}',
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),

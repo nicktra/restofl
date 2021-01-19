@@ -1,13 +1,51 @@
-import 'package:restofl/data/model/resto.dart';
-import 'package:restofl/ui/detail/resto_detail_page.dart';
+import 'package:restofl/data/model/restaurant_list.dart';
+import 'package:restofl/data/api/api_service.dart';
+import 'package:restofl/widgets/card_resto.dart';
 import 'package:restofl/widgets/platform_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class RestoListPage extends StatelessWidget {
+class RestoListPage extends StatefulWidget {
+  @override
+  _RestoListPageState createState() => _RestoListPageState();
+}
+
+class _RestoListPageState extends State<RestoListPage> {
+  Future<RestaurantList> _restaurant;
+
+  @override
+  void initState() {
+    _restaurant = ApiService().getRestaurantList();
+    super.initState();
+  }
+
   Widget _buildList(BuildContext context) {
-    return FutureBuilder<String>(
+    return FutureBuilder(
+      future: _restaurant,
+      builder: (context, AsyncSnapshot<RestaurantList> snapshot) {
+        var state = snapshot.connectionState;
+        if (state != ConnectionState.done) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data.restaurants.length,
+              itemBuilder: (context, index) {
+                var restaurant = snapshot.data.restaurants[index];
+                return CardResto(restaurant: restaurant);
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          } else {
+            return Text('');
+          }
+        }
+      },
+    );
+    /* return FutureBuilder<String>(
       future:
           DefaultAssetBundle.of(context).loadString('assets/local_resto.json'),
       builder: (context, snapshot) {
@@ -20,10 +58,10 @@ class RestoListPage extends StatelessWidget {
           },
         );
       },
-    );
+    ); */
   }
 
-  Widget _buildRestoItem(BuildContext context, Resto resto) {
+  /* Widget _buildRestoItem(BuildContext context, Resto resto) {
     return Material(
       child: InkWell(
         onTap: () {
@@ -116,7 +154,7 @@ class RestoListPage extends StatelessWidget {
         ),
       ),
     );
-  }
+  } */
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
