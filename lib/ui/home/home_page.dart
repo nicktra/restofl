@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:restofl/ui/home/resto_list_page.dart';
 import 'package:restofl/ui/settings/settings_page.dart';
+import 'package:restofl/ui/search/search_page.dart';
 import 'package:restofl/widgets/platform_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,9 +16,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _bottomNavIndex = 0;
   static const String _catalogueText = 'Catalogue';
+  static const String _searchText = 'Search';
 
   List<Widget> _listWidget = [
     RestoListPage(),
+    SearchPage(),
     SettingsPage(),
   ];
 
@@ -27,6 +30,10 @@ class _HomePageState extends State<HomePage> {
           ? CupertinoIcons.building_2_fill
           : Icons.food_bank_outlined),
       label: _catalogueText,
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Platform.isIOS ? CupertinoIcons.search : Icons.search),
+      label: _searchText,
     ),
     BottomNavigationBarItem(
       icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
