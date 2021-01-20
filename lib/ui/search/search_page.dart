@@ -1,7 +1,6 @@
 import 'package:restofl/widgets/platform_widget.dart';
 import 'package:restofl/widgets/card_resto.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:restofl/data/api/api_service.dart';
 import 'package:restofl/data/model/restaurant_search.dart';
@@ -89,7 +88,7 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                           Text(
-                            "Welcome to RestoFL\nSearch Favorite restaurant Here",
+                            "Welcome to RestoFL\nSearch Local Restaurant Here",
                             style: Theme.of(context).textTheme.subtitle1,
                             textAlign: TextAlign.center,
                           ),

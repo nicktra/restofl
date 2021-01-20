@@ -8,7 +8,6 @@ class ApiService {
   static final String _baseUrl = 'https://restaurant-api.dicoding.dev/';
   static final String baseUrlImage =
       'https://restaurant-api.dicoding.dev/images/medium/';
-  static final String _apiKey = '12345';
   static final String _list = 'list';
   static final String _detail = 'detail/';
   static final String _search = 'search?q=';

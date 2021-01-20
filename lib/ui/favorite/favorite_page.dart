@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class SettingsPage extends StatelessWidget {
-  static const String settingsTitle = 'Settings';
+class FavoritePage extends StatelessWidget {
+  static const String favoriteTitle = 'Favorite';
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(settingsTitle),
+        title: Text(favoriteTitle),
       ),
       body: _buildList(context),
     );
@@ -18,7 +18,7 @@ class SettingsPage extends StatelessWidget {
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(settingsTitle),
+        middle: Text(favoriteTitle),
       ),
       child: _buildList(context),
     );
@@ -29,7 +29,7 @@ class SettingsPage extends StatelessWidget {
       children: [
         Material(
           child: ListTile(
-            title: Text('Dark Theme'),
+            title: Text('Favorite (Soon)'),
             trailing: Switch.adaptive(
               value: false,
               onChanged: (value) {

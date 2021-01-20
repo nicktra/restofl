@@ -1,160 +1,54 @@
-import 'package:restofl/data/model/restaurant_list.dart';
-import 'package:restofl/data/api/api_service.dart';
 import 'package:restofl/widgets/card_resto.dart';
 import 'package:restofl/widgets/platform_widget.dart';
+import 'package:restofl/provider/restaurant_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
-class RestoListPage extends StatefulWidget {
-  @override
-  _RestoListPageState createState() => _RestoListPageState();
-}
-
-class _RestoListPageState extends State<RestoListPage> {
-  Future<RestaurantList> _restaurant;
-
-  @override
-  void initState() {
-    _restaurant = ApiService().getRestaurantList();
-    super.initState();
-  }
-
+class RestoListPage extends StatelessWidget {
   Widget _buildList(BuildContext context) {
-    return FutureBuilder(
-      future: _restaurant,
-      builder: (context, AsyncSnapshot<RestaurantList> snapshot) {
-        var state = snapshot.connectionState;
-        if (state != ConnectionState.done) {
+    return Consumer<RestaurantProvider>(
+      builder: (context, state, _) {
+        if (state.state == ResultState.Loading) {
           return Center(child: CircularProgressIndicator());
         } else {
-          if (snapshot.hasData) {
+          if (state.state == ResultState.HasData) {
             return ListView.builder(
               shrinkWrap: true,
-              itemCount: snapshot.data.restaurants.length,
+              itemCount: state.result.restaurants.length,
               itemBuilder: (context, index) {
-                var restaurant = snapshot.data.restaurants[index];
+                var restaurant = state.result.restaurants[index];
                 return CardResto(restaurant: restaurant);
               },
             );
-          } else if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
+          } else if (state.state == ResultState.NoData) {
+            return Center(child: Text(state.message));
+          } else if (state.state == ResultState.Error) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.signal_cellular_off,
+                    color: Colors.teal[400],
+                    size: 32,
+                  ),
+                  Text(
+                    "No Internet Connection\nPlease Turn On Internet",
+                    style: Theme.of(context).textTheme.subtitle1,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
           } else {
-            return Text('');
+            return Center(child: Text(''));
           }
         }
       },
     );
-    /* return FutureBuilder<String>(
-      future:
-          DefaultAssetBundle.of(context).loadString('assets/local_resto.json'),
-      builder: (context, snapshot) {
-        final List<Resto> restos = parseResto(snapshot.data);
-        return ListView.builder(
-          itemCount: restos.length,
-          padding: EdgeInsets.all(8),
-          itemBuilder: (context, index) {
-            return _buildRestoItem(context, restos[index]);
-          },
-        );
-      },
-    ); */
   }
-
-  /* Widget _buildRestoItem(BuildContext context, Resto resto) {
-    return Material(
-      child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, RestoDetailPage.routeName,
-              arguments: resto);
-        },
-        child: Stack(
-          children: <Widget>[
-            SizedBox(
-              width: double.infinity,
-              height: 180,
-              child: Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Hero(
-                      tag: resto.name,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15.0),
-                          topRight: Radius.circular(15.0),
-                        ),
-                        child: Image.network(
-                          resto.pictureId,
-                          height: 110,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 18,
-                        right: 18,
-                      ),
-                      child: Text(
-                        resto.name,
-                        style: Theme.of(context).textTheme.headline6,
-                        textAlign: TextAlign.left,
-                        maxLines: 1,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 18,
-                        right: 18,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.teal[400],
-                                size: 16,
-                              ),
-                              Text(
-                                resto.city,
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.star,
-                                color: Colors.amber[400],
-                                size: 16,
-                              ),
-                              Text(
-                                resto.rating.toString(),
-                                style: Theme.of(context).textTheme.subtitle1,
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  } */
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(

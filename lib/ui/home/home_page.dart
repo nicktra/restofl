@@ -2,9 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:restofl/ui/home/resto_list_page.dart';
-import 'package:restofl/ui/settings/settings_page.dart';
+import 'package:restofl/ui/favorite/favorite_page.dart';
 import 'package:restofl/ui/search/search_page.dart';
 import 'package:restofl/widgets/platform_widget.dart';
+import 'package:restofl/provider/restaurant_provider.dart';
+import 'package:restofl/data/api/api_service.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home_page';
@@ -19,9 +22,12 @@ class _HomePageState extends State<HomePage> {
   static const String _searchText = 'Search';
 
   List<Widget> _listWidget = [
-    RestoListPage(),
+    ChangeNotifierProvider<RestaurantProvider>(
+      create: (_) => RestaurantProvider(apiService: ApiService()),
+      child: RestoListPage(),
+    ),
     SearchPage(),
-    SettingsPage(),
+    FavoritePage(),
   ];
 
   List<BottomNavigationBarItem> _bottomNavBarItems = [
@@ -36,8 +42,9 @@ class _HomePageState extends State<HomePage> {
       label: _searchText,
     ),
     BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
-      label: SettingsPage.settingsTitle,
+      icon:
+          Icon(Platform.isIOS ? CupertinoIcons.heart : Icons.favorite_outline),
+      label: FavoritePage.favoriteTitle,
     ),
   ];
 
