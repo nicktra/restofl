@@ -6,6 +6,7 @@ import 'package:restofl/ui/favorite/favorite_page.dart';
 import 'package:restofl/ui/search/search_page.dart';
 import 'package:restofl/widgets/platform_widget.dart';
 import 'package:restofl/provider/restaurant_provider.dart';
+import 'package:restofl/provider/search_provider.dart';
 import 'package:restofl/data/api/api_service.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +27,10 @@ class _HomePageState extends State<HomePage> {
       create: (_) => RestaurantProvider(apiService: ApiService()),
       child: RestoListPage(),
     ),
-    SearchPage(),
+    ChangeNotifierProvider<SearchProvider>(
+      create: (_) => SearchProvider(apiService: ApiService()),
+      child: SearchPage(),
+    ),
     FavoritePage(),
   ];
 

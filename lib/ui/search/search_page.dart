@@ -1,9 +1,9 @@
+import 'package:provider/provider.dart';
+import 'package:restofl/provider/search_provider.dart';
 import 'package:restofl/widgets/platform_widget.dart';
 import 'package:restofl/widgets/card_resto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:restofl/data/api/api_service.dart';
-import 'package:restofl/data/model/restaurant_search.dart';
 
 class SearchPage extends StatefulWidget {
   static const routeName = '/search-page';
@@ -14,7 +14,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   static const String searchTitle = 'Search';
-  Future<RestaurantSearch> _restaurantSearch;
+
   bool isEmpty = true;
 
   Widget _buildAndroid(BuildContext context) {
@@ -110,52 +110,66 @@ class _SearchPageState extends State<SearchPage> {
       return;
     } else {
       isEmpty = false;
-      _restaurantSearch = ApiService().getRestaurantSearch(text);
+      context.read<SearchProvider>().fetchSearchRestaurant(text);
     }
     setState(() {});
   }
 
   Widget _buildList(BuildContext context) {
-    return FutureBuilder(
-      future: _restaurantSearch,
-      builder: (context, AsyncSnapshot<RestaurantSearch> snapshot) {
-        var state = snapshot.connectionState;
-        if (state != ConnectionState.done) {
+    return Consumer<SearchProvider>(
+      builder: (context, state, _) {
+        if (state.state == ResultState.Loading) {
           return Center(child: CircularProgressIndicator());
         } else {
-          if (snapshot.hasData) {
-            return snapshot.data.restaurants.length != 0
-                ? ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.restaurants.length,
-                    itemBuilder: (context, index) {
-                      var restaurant = snapshot.data.restaurants[index];
-                      return CardResto(restaurant: restaurant);
-                    },
-                  )
-                : Container(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            child: Image.asset(
-                              "assets/images/data-not-found.png",
-                              fit: BoxFit.cover,
-                              height: 100, // set your height
-                              width: 100,
-                            ),
-                          ),
-                          Text(
-                            "Not Found",
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                        ],
+          if (state.state == ResultState.HasData) {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: state.result.restaurants.length,
+              itemBuilder: (context, index) {
+                var restaurant = state.result.restaurants[index];
+                return CardResto(restaurant: restaurant);
+              },
+            );
+          } else if (state.state == ResultState.NoData) {
+            return Container(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      child: Image.asset(
+                        "assets/images/data-not-found.png",
+                        fit: BoxFit.cover,
+                        height: 100, // set your height
+                        width: 100,
                       ),
                     ),
-                  );
-          } else if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
+                    Text(
+                      "Not Found",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else if (state.state == ResultState.Error) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.signal_cellular_off,
+                    color: Colors.teal[400],
+                    size: 32,
+                  ),
+                  Text(
+                    "No Internet Connection\nPlease Turn On Internet",
+                    style: Theme.of(context).textTheme.subtitle1,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
           } else {
             return Text('');
           }
