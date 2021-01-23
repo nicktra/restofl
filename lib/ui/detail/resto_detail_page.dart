@@ -3,6 +3,8 @@ import 'package:restofl/data/model/restaurant_detail.dart';
 import 'package:restofl/data/model/restaurant_list.dart' as restaurant_list;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:restofl/provider/restaurant_detail_provider.dart';
+import 'package:provider/provider.dart';
 
 class RestoDetailPage extends StatefulWidget {
   static const routeName = '/resto_detail';
@@ -16,32 +18,52 @@ class RestoDetailPage extends StatefulWidget {
 }
 
 class _RestoDetailPageState extends State<RestoDetailPage> {
-  Future<RestaurantDetail> _restaurantDetail;
-
+  RestaurantDetailProvider restaurantDetailNotifier;
   @override
   void initState() {
-    _restaurantDetail = ApiService().getRestaurantDetail(widget.restaurant.id);
+    restaurantDetailNotifier =
+        RestaurantDetailProvider(apiService: ApiService());
+    restaurantDetailNotifier.fetchDetailRestaurant(widget.restaurant.id);
     super.initState();
   }
 
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _restaurantDetail,
-      builder: (context, AsyncSnapshot<RestaurantDetail> snapshot) {
-        var state = snapshot.connectionState;
-        if (state != ConnectionState.done) {
-          return Center(child: CircularProgressIndicator());
-        } else {
-          if (snapshot.hasData) {
-            var restaurant = snapshot.data.restaurant;
-            return _buildItem(restaurant, context);
-          } else if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
+    return ChangeNotifierProvider<RestaurantDetailProvider>.value(
+      value: restaurantDetailNotifier,
+      child: Consumer<RestaurantDetailProvider>(
+        builder: (context, state, _) {
+          if (state.state == ResultState.Loading) {
+            return Center(child: CircularProgressIndicator());
           } else {
-            return Text('');
+            if (state.state == ResultState.HasData) {
+              var restaurant = state.result.restaurant;
+              return _buildItem(restaurant, context);
+            } else if (state.state == ResultState.NoData) {
+              return Center(child: Text(state.message));
+            } else if (state.state == ResultState.Error) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.signal_cellular_off,
+                      color: Colors.teal[400],
+                      size: 32,
+                    ),
+                    Text(
+                      "No Internet Connection\nPlease Turn On Internet",
+                      style: Theme.of(context).textTheme.subtitle1,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Text('');
+            }
           }
-        }
-      },
+        },
+      ),
     );
   }
 

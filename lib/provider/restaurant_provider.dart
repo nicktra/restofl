@@ -25,15 +25,15 @@ class RestaurantProvider extends ChangeNotifier {
     try {
       _state = ResultState.Loading;
       notifyListeners();
-      final restaurant = await apiService.getRestaurantList();
-      if (restaurant.restaurants.isEmpty) {
+      final _restaurant = await apiService.getRestaurantList();
+      if (_restaurant.restaurants.isEmpty) {
         _state = ResultState.NoData;
         notifyListeners();
         return _message = 'Empty Data';
       } else {
         _state = ResultState.HasData;
         notifyListeners();
-        return _restaurantList = restaurant;
+        return _restaurantList = _restaurant;
       }
     } catch (e) {
       _state = ResultState.Error;

@@ -23,15 +23,15 @@ class SearchProvider extends ChangeNotifier {
     try {
       _state = ResultState.Loading;
       notifyListeners();
-      final restaurant = await apiService.getRestaurantSearch(keyword);
-      if (restaurant.restaurants.isEmpty) {
+      final _restaurant = await apiService.getRestaurantSearch(keyword);
+      if (_restaurant.restaurants.isEmpty) {
         _state = ResultState.NoData;
         notifyListeners();
         return _message = 'Empty Data';
       } else {
         _state = ResultState.HasData;
         notifyListeners();
-        return _restaurantSearch = restaurant;
+        return _restaurantSearch = _restaurant;
       }
     } catch (e) {
       _state = ResultState.Error;

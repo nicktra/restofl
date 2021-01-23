@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:restofl/ui/home/resto_list_page.dart';
 import 'package:restofl/ui/favorite/favorite_page.dart';
 import 'package:restofl/ui/search/search_page.dart';
+import 'package:restofl/ui/settings/settings_page.dart';
 import 'package:restofl/widgets/platform_widget.dart';
 import 'package:restofl/provider/restaurant_provider.dart';
 import 'package:restofl/provider/search_provider.dart';
@@ -32,6 +33,7 @@ class _HomePageState extends State<HomePage> {
       child: SearchPage(),
     ),
     FavoritePage(),
+    SettingsPage(),
   ];
 
   List<BottomNavigationBarItem> _bottomNavBarItems = [
@@ -49,6 +51,10 @@ class _HomePageState extends State<HomePage> {
       icon:
           Icon(Platform.isIOS ? CupertinoIcons.heart : Icons.favorite_outline),
       label: FavoritePage.favoriteTitle,
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Platform.isIOS ? CupertinoIcons.settings : Icons.settings),
+      label: SettingsPage.settingsTitle,
     ),
   ];
 
