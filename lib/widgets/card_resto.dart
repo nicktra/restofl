@@ -1,3 +1,4 @@
+import 'package:restofl/common/navigation.dart';
 import 'package:restofl/data/model/restaurant_list.dart';
 import 'package:restofl/data/api/api_service.dart';
 import 'package:restofl/ui/detail/resto_detail_page.dart';
@@ -12,10 +13,8 @@ class CardResto extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, RestoDetailPage.routeName,
-              arguments: restaurant);
-        },
+        onTap: () =>
+            Navigation.intentWithData(RestoDetailPage.routeName, restaurant),
         child: Stack(
           children: <Widget>[
             SizedBox(

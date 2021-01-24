@@ -1,3 +1,4 @@
+import 'package:restofl/common/navigation.dart';
 import 'package:restofl/data/api/api_service.dart';
 import 'package:restofl/data/model/restaurant_detail.dart';
 import 'package:restofl/data/model/restaurant_list.dart' as restaurant_list;
@@ -99,7 +100,7 @@ class _RestoDetailPageState extends State<RestoDetailPage> {
                           size: 30,
                         ),
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigation.back();
                         },
                       ),
                     ],

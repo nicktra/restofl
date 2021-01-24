@@ -1,10 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:restofl/provider/scheduling_provider.dart';
+import 'package:restofl/ui/detail/resto_detail_page.dart';
 import 'package:restofl/ui/home/resto_list_page.dart';
 import 'package:restofl/ui/favorite/favorite_page.dart';
 import 'package:restofl/ui/search/search_page.dart';
 import 'package:restofl/ui/settings/settings_page.dart';
+import 'package:restofl/utils/background_service.dart';
+import 'package:restofl/utils/notification_helper.dart';
 import 'package:restofl/widgets/platform_widget.dart';
 import 'package:restofl/provider/restaurant_provider.dart';
 import 'package:restofl/provider/search_provider.dart';
@@ -23,6 +27,9 @@ class _HomePageState extends State<HomePage> {
   static const String _catalogueText = 'Catalogue';
   static const String _searchText = 'Search';
 
+  final NotificationHelper _notificationHelper = NotificationHelper();
+  final BackgroundService _service = BackgroundService();
+
   List<Widget> _listWidget = [
     ChangeNotifierProvider<RestaurantProvider>(
       create: (_) => RestaurantProvider(apiService: ApiService()),
@@ -33,7 +40,10 @@ class _HomePageState extends State<HomePage> {
       child: SearchPage(),
     ),
     FavoritePage(),
-    SettingsPage(),
+    ChangeNotifierProvider<SchedulingProvider>(
+      create: (_) => SchedulingProvider(),
+      child: SettingsPage(),
+    ),
   ];
 
   List<BottomNavigationBarItem> _bottomNavBarItems = [
@@ -82,6 +92,20 @@ class _HomePageState extends State<HomePage> {
         return _listWidget[index];
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    port.listen((_) async => await _service.someTask());
+    _notificationHelper
+        .configureSelectNotificationSubject(RestoDetailPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    selectNotificationSubject.close();
   }
 
   @override
