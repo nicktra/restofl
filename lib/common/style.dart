@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final Color primaryColor = Color(0xFFFFFFFF);
-final Color primaryColor2 = Color(0xFF000000);
+final Color darkPrimaryColor = Color(0xFF000000);
 final Color secondaryColor = Colors.brown;
-final Color secondaryColor2 = Colors.brown[200];
+final Color darkSecondaryColor = Colors.brown[200];
 
 final TextTheme myTextTheme = TextTheme(
   headline1: GoogleFonts.nunito(
@@ -31,4 +31,36 @@ final TextTheme myTextTheme = TextTheme(
       fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
   overline: GoogleFonts.lora(
       fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+);
+
+ThemeData lightTheme = ThemeData(
+  brightness: Brightness.light,
+  visualDensity: VisualDensity.adaptivePlatformDensity,
+  textTheme: myTextTheme,
+  primaryColor: primaryColor,
+  accentColor: secondaryColor,
+  appBarTheme: AppBarTheme(
+    textTheme: myTextTheme.apply(bodyColor: Colors.black),
+    elevation: 0,
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    selectedItemColor: secondaryColor,
+    unselectedItemColor: Colors.grey,
+  ),
+);
+
+ThemeData darkTheme = ThemeData.dark().copyWith(
+  brightness: Brightness.dark,
+  visualDensity: VisualDensity.adaptivePlatformDensity,
+  textTheme: myTextTheme,
+  primaryColor: darkPrimaryColor,
+  accentColor: darkSecondaryColor,
+  appBarTheme: AppBarTheme(
+    textTheme: myTextTheme.apply(bodyColor: Colors.white),
+    elevation: 0,
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    selectedItemColor: darkSecondaryColor,
+    unselectedItemColor: Colors.grey,
+  ),
 );

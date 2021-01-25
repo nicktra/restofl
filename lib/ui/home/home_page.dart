@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:restofl/provider/scheduling_provider.dart';
 import 'package:restofl/ui/detail/resto_detail_page.dart';
 import 'package:restofl/ui/home/resto_list_page.dart';
 import 'package:restofl/ui/favorite/favorite_page.dart';
@@ -10,10 +9,6 @@ import 'package:restofl/ui/settings/settings_page.dart';
 import 'package:restofl/utils/background_service.dart';
 import 'package:restofl/utils/notification_helper.dart';
 import 'package:restofl/widgets/platform_widget.dart';
-import 'package:restofl/provider/restaurant_provider.dart';
-import 'package:restofl/provider/search_provider.dart';
-import 'package:restofl/data/api/api_service.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home_page';
@@ -31,19 +26,10 @@ class _HomePageState extends State<HomePage> {
   final BackgroundService _service = BackgroundService();
 
   List<Widget> _listWidget = [
-    ChangeNotifierProvider<RestaurantProvider>(
-      create: (_) => RestaurantProvider(apiService: ApiService()),
-      child: RestoListPage(),
-    ),
-    ChangeNotifierProvider<SearchProvider>(
-      create: (_) => SearchProvider(apiService: ApiService()),
-      child: SearchPage(),
-    ),
+    RestoListPage(),
+    SearchPage(),
     FavoritePage(),
-    ChangeNotifierProvider<SchedulingProvider>(
-      create: (_) => SchedulingProvider(),
-      child: SettingsPage(),
-    ),
+    SettingsPage(),
   ];
 
   List<BottomNavigationBarItem> _bottomNavBarItems = [

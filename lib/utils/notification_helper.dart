@@ -61,7 +61,6 @@ class NotificationHelper {
     var randomRestaurant = Random().nextInt(restaurantList.restaurants.length);
     var detailRestaurant = restaurantList.restaurants[randomRestaurant];
     var nameRestaurant = detailRestaurant.name;
-    /* var nameRestaurant = "Today Restaurant Recommendation"; */
 
     await flutterLocalNotificationsPlugin.show(
         0, titleNotification, nameRestaurant, platformChannelSpecifics,
@@ -72,8 +71,6 @@ class NotificationHelper {
     selectNotificationSubject.stream.listen(
       (String payload) async {
         var data = Restaurant.fromJson(json.decode(payload));
-        /* var indexRestaurant = Random().nextInt(data.restaurants.length);
-        var infoRestaurant = data.restaurants[indexRestaurant]; */
         Navigation.intentWithData(route, data);
       },
     );
