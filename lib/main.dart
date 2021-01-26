@@ -7,7 +7,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:restofl/common/navigation.dart';
 import 'package:restofl/data/api/api_service.dart';
+import 'package:restofl/data/db/database_helper.dart';
 import 'package:restofl/data/preferences/preferences_helper.dart';
+import 'package:restofl/provider/database_provider.dart';
 import 'package:restofl/provider/preferences_provider.dart';
 import 'package:restofl/provider/restaurant_provider.dart';
 import 'package:restofl/provider/scheduling_provider.dart';
@@ -54,9 +56,9 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        /* ChangeNotifierProvider(
+        ChangeNotifierProvider(
           create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
-        ), */
+        ),
       ],
       child: Consumer<PreferencesProvider>(
         builder: (context, provider, child) {
