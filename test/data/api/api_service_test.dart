@@ -1,34 +1,33 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:restofl/data/api/api_service.dart';
+import 'package:restofl/data/model/restaurant_detail.dart';
+
+class MockClient extends Mock implements ApiService {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('api service test', () {
-    ApiService apiService;
+    MockClient api;
+
     setUp(() {
-      apiService = ApiService();
+      api = MockClient();
     });
-    test('Get Restaurant List and Check index 0', () async {
-      // act
-      var restaurantList = await apiService.getRestaurantList();
-      // assert
-      var result = restaurantList.restaurants[0];
-      var restaurantName = result.name;
-      expect(restaurantName, "Melting Pot");
-    });
-    test('Get Restaurant Detail By Id', () async {
-      // act
-      var restaurantDetail =
-          await apiService.getRestaurantDetail('s1knt6za9kkfw1e867');
-      // assert
-      var result = restaurantDetail.error;
-      expect(result, false);
-    });
-    test('Get Restaurant Search By Keyword Jeruk', () async {
-      // act
-      var restaurantSearch = await apiService.getRestaurantSearch('jeruk');
-      // assert
-      var result = restaurantSearch.error;
-      expect(result, false);
+
+    test('Get Restaurant by Id', () async {
+      String id = "rqdv5juczeskfw1e867";
+      when(api.getRestaurantDetail(id)).thenAnswer((_) async {
+        var result =
+            await rootBundle.loadString('assets/restaurant_detail.json');
+
+        return RestaurantDetail.fromJson(json.decode(result));
+      });
+      final response = await api.getRestaurantDetail(id);
+      var restaurant = response.restaurant;
+      expect(restaurant.name, "Melting Pot");
     });
   });
 }

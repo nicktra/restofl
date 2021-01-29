@@ -45,7 +45,7 @@ class SettingsPage extends StatelessWidget {
             ),
             Material(
               child: ListTile(
-                title: Text('Scheduling News'),
+                title: Text('Restaurant Notification'),
                 trailing: Consumer<SchedulingProvider>(
                   builder: (context, scheduled, _) {
                     return Switch.adaptive(

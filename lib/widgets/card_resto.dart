@@ -60,7 +60,6 @@ class CardResto extends StatelessWidget {
                                         ),
                                         isFavorited
                                             ? Positioned(
-                                                // will be positioned in the top right of the container
                                                 top: 0,
                                                 right: 0,
                                                 child: FlatButton(
@@ -76,7 +75,6 @@ class CardResto extends StatelessWidget {
                                                 ),
                                               )
                                             : Positioned(
-                                                // will be positioned in the top right of the container
                                                 top: 0,
                                                 right: 0,
                                                 child: FlatButton(
