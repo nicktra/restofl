@@ -1,3 +1,4 @@
+import 'package:restofl/utils/result_state.dart';
 import 'package:restofl/widgets/card_resto.dart';
 import 'package:restofl/widgets/platform_widget.dart';
 import 'package:restofl/provider/restaurant_provider.dart';

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:restofl/provider/restaurant_detail_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:restofl/utils/result_state.dart';
 
 class RestoDetailPage extends StatefulWidget {
   static const routeName = '/resto_detail';

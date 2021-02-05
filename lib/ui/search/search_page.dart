@@ -1,5 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:restofl/provider/search_provider.dart';
+import 'package:restofl/utils/result_state.dart';
 import 'package:restofl/widgets/platform_widget.dart';
 import 'package:restofl/widgets/card_resto.dart';
 import 'package:flutter/cupertino.dart';
@@ -69,7 +70,7 @@ class _SearchPageState extends State<SearchPage> {
                       color: Colors.blue.shade400,
                     ),
                     hintText: "Search by name, category, or menu"),
-                onChanged: onSearchTextChanged,
+                onChanged: _onSearchTextChanged,
               ),
             ),
             isEmpty
@@ -103,7 +104,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  onSearchTextChanged(String text) async {
+  _onSearchTextChanged(String text) async {
     if (text.isEmpty || text == "") {
       isEmpty = true;
       setState(() {});
